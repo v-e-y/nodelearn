@@ -1,4 +1,5 @@
 "use strict";
+var fs = require("fs");
 
 function Files(name){
     this.name = name.toLowerCase().trim().toString();
@@ -8,42 +9,47 @@ function Files(name){
     // Максимальная длина имени файла.
     // Цыфры выдуманны и не счем не связанны.
     this.maxNameLength = 63;
-
     // Масив где хранятся имена файлов.
     this.fileNamesDataBase = [];
+    // Папка для франения файлов.
+    this.filesDirectory = "public";
 
-    // Проверяем уникальность имени файла.
-    this.checkNameUniqu = function(){
-        for (var i = 0; i < this.fileNamesDataBase.length; i++){
-            var nameInBase = this.fileNamesDataBase[i];
-            if (this.name === nameInBase){
-                return new Error("Такое имя файла уже есть в базе.");
-            }
+    // Поверяем существование директории.
+    // TODO Найти как правильно проверить существование папки
+    fs.readdir(this.filesDirectory, function(err){
+        if (err){
+            // Если директории нет, создаем её.
+            fs.mkdir("publik", function(err){
+                if (err) {
+                    throw new Error("Немогу создать папку");
+                }
+            })
         }
-
-    };
-
-    // Проверяем длину имени файла на соответствие заданнным параметрам
-    // в классе Files, в свойствах minNameLength и maxNameLength.
-    this.checkFilesNameLength = function() {
-        if (this.name.length < this.minNameLength || this.name.length > this.maxNameLength) {
-            return new Error("Длина имени файла должна быть от 3 до 63 символов.");
-        } else {
-            console.log("name length god");
-        }
-
-    };
-
-    // Добавляем имя файла в базу имен fileNamesDataBase.
-    this.addFileName = function(){
-        this.fileNamesDataBase.push(this.name);
-    };
-
+    });
 
 }
 
+// Проверяем уникальность имени файла.
+Files.prototype.checkNameUniqu = function(){
+    for (var i = 0; i < this.fileNamesDataBase.length; i++){
+        var nameInBase = this.fileNamesDataBase[i];
+        if (this.name === nameInBase){
+            return new Error("Такое имя файла уже есть в базе.");
+        }
+    }
+};
 
-var testFilename = new Files("asddddddddddddddGFDFGDFGDFGDFgdfgdfgdfg|RAGFGDSFGDSFghdfgdfgdfgFGSAFGSFGSDFGSDFHGSDFHDFGDSFGSDFGDSFGDFGDFGsdfsdf ");
-console.log(testFilename.name);
-console.log(testFilename.name.length);
-testFilename.checkFilesNameLength();
+// Проверяем длину имени файла на соответствие заданнным параметрам
+// в классе Files, в свойствах minNameLength и maxNameLength.
+Files.prototype.checkFilesNameLength = function() {
+    if (this.name.length < this.minNameLength || this.name.length > this.maxNameLength) {
+        return new Error("Длина имени файла должна быть от 3 до 63 символов.");
+    }
+};
+
+// Добавляем имя файла в базу имен fileNamesDataBase.
+Files.prototype.addFileName = function(){
+    this.fileNamesDataBase.push(this.name);
+};
+
+var testNamef = new Files("dfgdfgdfgdfg");
