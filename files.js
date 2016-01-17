@@ -1,6 +1,6 @@
 "use strict";
-var fs = require("fs");
-var path = require('path');
+const fs = require("fs");
+const path = require('path');
 
 function Files(name){
     this.name = name.toLowerCase().trim().toString();
@@ -22,8 +22,8 @@ function Files(name){
     fs.readdir(this.filesDirectory, function(err){
         if (err){
             // Если директории нет, создаем её.
-            fs.mkdirSync("publik", function(err){
-                if (err) {
+            fs.mkdir("publik", function(err){
+                if (err.code !== "EEXIST") {
                     throw new Error("Немогу создать папку");
                 }
             });
