@@ -53,5 +53,3 @@ Files.prototype.checkFilesNameLength = function() {
 Files.prototype.addFileName = function(){
     this.fileNamesDataBase.push(this.name);
 };
-
-var testNamef = new Files("dfgdfgdfgdfg");
