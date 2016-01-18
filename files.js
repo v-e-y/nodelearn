@@ -16,18 +16,18 @@ function Files(name){
     this.filesDirectory = __dirname + "\\public";
 
     // Поверяем существование директории/папки.
-    // TODO Найти как правильно проверить существование папки
-    // TODO Разобраться как работает .readdirSync (почему не возвращает список файлов)
-    // TODO .readdir[Sync] возвращает список файло в дироктории, что позволит оптемищировать класс.
-    fs.readdir(this.filesDirectory, function(err){
+    fs.readdir(this.filesDirectory, function(err, list){
+
         if (err){
             // Если директории нет, создаем её.
-            fs.mkdir("publik", function(err){
-                if (err.code !== "EEXIST") {
+            fs.mkdir("public", function(err){
+                if (err && err.code !== "EEXIST") {
                     throw new Error("Немогу создать папку");
                 }
             });
+            throw new Error;
         }
+
     });
 }
 
@@ -53,3 +53,5 @@ Files.prototype.checkFilesNameLength = function() {
 Files.prototype.addFileName = function(){
     this.fileNamesDataBase.push(this.name);
 };
+
+var testfile = new Files("testfile");
